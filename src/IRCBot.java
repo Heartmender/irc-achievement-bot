@@ -49,6 +49,12 @@ public class IRCBot {
 	 */
 	private static void addModules(PircBotX bot, Database db) {
 		bot.getListenerManager().addListener(new CruiseControl(db));
+		bot.getListenerManager().addListener(new Lollerskating(db));
+		bot.getListenerManager().addListener(new Roflcopter(db));
+		bot.getListenerManager().addListener(new OMFGWTFNukes(db));
+		bot.getListenerManager().addListener(new TheAdvertiser(db));
+		bot.getListenerManager().addListener(new TheSpammer(db));
+		bot.getListenerManager().addListener(new DoYouEvenContent(db));
 	}
 	
 }
