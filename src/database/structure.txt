@@ -1,0 +1,11 @@
+Database Structure
+==================
+
+Tbl: achievements // achievements list
+id, name, points, description
+
+Tbl: users // to show awards won
+id, nick
+
+Tbl: tracker // to track ongoing achievements
+id, nick, count

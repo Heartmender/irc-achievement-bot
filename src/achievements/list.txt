@@ -1,0 +1,30 @@
+List of Achievements
+====================
+
+The items in this list are in the following form:
+
+(Achievement ID) - (Achievement Name) - (Points) - (Description)
+
+1 - CRUISE CONTROL - 5 - Type your statements in capital letters three times in a row.
+2 - Lollerskating - 10 - Say 'lol' 100 times.
+3 - Roflcopter - 25 - Say 'lol' 1000 times.
+4 - OMFGWTFNukes - 50 - Say 'lol' 10000 times.
+5 - The Advertiser - 10 - Post 100 links in this channel.
+6 - The Spammer - 25 - Post 1000 links in this channel.
+7 - Do you even content? - 50 - Post 10000 links in this channel.
+8 - Popularity Contest - 25 - Be the most mentioned person in chat this week.
+9 - Attention Whore - 25 - Post a plurality of all the chat in channel this week.
+10 - Forever Alone - 5 - Post 10 chat messages consecutively without reply.
+11 - DSL Line - 10 - Stay connected for one week.
+12 - Cable Line - 25 - Stay connected for one month.
+13 - There's no place like 127.0.0.1 - 50 - Stay connected for one year.
+14 - Away from keyboard - 10 - Be afk for one week.
+15 - Extended Absence - 25 - Be afk for two weeks.
+16 - Missing in Action - 50 - Be afk for one month.
+17 - Bouncy Bouncy - 5 - Disconnect 10 times in one day.
+18 - Really should get that fixed - 10 - Disconnect 20 times in one day.
+19 - Third world Internet much? - 25 - Disconnect 100 times in one day.
+20 - Sycophant - 5 - Look up your achievement points 10 times in one day.
+21 - BOP - 10 - Say 'bop' or 'boop' 100 times.
+22 - BOOP - 25 - Say 'bop' or 'boop' 1000 times.
+23 - Puppet Pal Mitch - Say 'bop' or 'boop' 10000 times.
