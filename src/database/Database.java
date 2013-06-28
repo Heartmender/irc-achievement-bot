@@ -1,18 +1,27 @@
 package database;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class Database {
 	
 	private static Database instance = null;
+	private static final String CONNECT_STRING = "jdbc:mysql://localhost/achievement_bot?"
+			+ "user=achievement&password=bot";
 	
-	private Database() {
-		
+	private Database() throws InstantiationException, IllegalAccessException, ClassNotFoundException { 
+		Class.forName("com.mysql.jdbc.Driver").newInstance();
 	}
 	
 	/**
 	 * Gets the singleton instance of this database.
 	 * @return the singleton instance of this database
+	 * @throws Exceptions when things go poorly.
 	 */
-	public static Database getInstance() {
+	public static Database getInstance() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		if(instance == null) {
 			instance = new Database();
 		}
@@ -24,10 +33,46 @@ public class Database {
 	 * @param nick the specified nick
 	 * @param achievementId the specified achievement id
 	 * @return true if the specified nick has already earned this achievement, false otherwise
+	 * @throws SQLException when things go poorly.
 	 */
-	public boolean hasAchievement(String nick, int achievementId) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean hasAchievement(String nick, int achievementId) throws SQLException {
+		boolean hasAchievement = false;
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("SELECT id FROM users WHERE nick='" + nick + "';");
+			while(rs.next()) {
+				if(achievementId == rs.getInt("id")) {
+					hasAchievement = true;
+					break;
+				}
+			}
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { } // ignore
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
+		return hasAchievement;
 	}
 
 	/**

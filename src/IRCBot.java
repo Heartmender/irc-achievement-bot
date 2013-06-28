@@ -13,7 +13,16 @@ public class IRCBot {
 
 	public static void main(String[] args) {
 		PircBotX bot = new PircBotX();
-		Database db = Database.getInstance();
+		Database db = null;
+		try {
+			db = Database.getInstance();
+		} catch (InstantiationException e1) {
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			e1.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		}
 		setUpBot(bot);
 		addModules(bot, db);
 		try {
@@ -48,6 +57,7 @@ public class IRCBot {
 	 * @param bot the bot to add handlers to
 	 */
 	private static void addModules(PircBotX bot, Database db) {
+		/* achievements */
 		bot.getListenerManager().addListener(new CruiseControl(db));
 		bot.getListenerManager().addListener(new Lollerskating(db));
 		bot.getListenerManager().addListener(new Roflcopter(db));
@@ -58,6 +68,9 @@ public class IRCBot {
 		bot.getListenerManager().addListener(new PopularityContest(db));
 		bot.getListenerManager().addListener(new AttentionWhore(db));
 		bot.getListenerManager().addListener(new ForeverAlone(db));
+		
+		/* commands */
+		
 	}
 	
 }
