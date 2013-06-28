@@ -4,9 +4,10 @@ import database.Database;
 
 public class TheSpammer extends TheAdvertiser {
 
+	protected static final int COUNT = 1000;
+	
 	public TheSpammer(Database db) {
 		super(db);
-		COUNT = 1000;
 	}
 	
 	protected int getAchievementId() {

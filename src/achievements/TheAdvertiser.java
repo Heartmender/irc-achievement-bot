@@ -9,11 +9,10 @@ import database.Database;
 
 public class TheAdvertiser extends Achievement {
 	
-	protected static int COUNT;
+	protected static final int COUNT = 100;
 
 	public TheAdvertiser(Database db) {
 		super(db);
-		COUNT = 100;
 	}
 
 	@Override

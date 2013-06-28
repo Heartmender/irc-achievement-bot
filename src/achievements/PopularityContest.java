@@ -35,16 +35,16 @@ public class PopularityContest extends Achievement {
 		}
 	}
 	
-	protected boolean hasOneWeekPassed() {
+	private boolean hasOneWeekPassed() {
 		long time = System.currentTimeMillis() - getTimeStamp();
 		return (time >= 604800000);
 	}
 	
-	protected long getTimeStamp() {
+	private long getTimeStamp() {
 		return db.getTimeStamp(getAchievementId(), "AchievementBot");
 	}
 	
-	protected void setTimeStamp() {
+	private void setTimeStamp() {
 		db.setTimeStamp(getAchievementId(), "AchievementBot", System.currentTimeMillis());
 	}
 	

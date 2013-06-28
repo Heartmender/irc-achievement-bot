@@ -6,11 +6,10 @@ import database.Database;
 
 public class Lollerskating extends Achievement {
 	
-	protected static int COUNT;
+	protected static final int COUNT = 100;
 
 	public Lollerskating(Database db) {
 		super(db);
-		COUNT = 100;
 	}
 
 	protected int getAchievementId() {

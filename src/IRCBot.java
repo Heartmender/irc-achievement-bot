@@ -55,6 +55,9 @@ public class IRCBot {
 		bot.getListenerManager().addListener(new TheAdvertiser(db));
 		bot.getListenerManager().addListener(new TheSpammer(db));
 		bot.getListenerManager().addListener(new DoYouEvenContent(db));
+		bot.getListenerManager().addListener(new PopularityContest(db));
+		bot.getListenerManager().addListener(new AttentionWhore(db));
+		bot.getListenerManager().addListener(new ForeverAlone(db));
 	}
 	
 }
