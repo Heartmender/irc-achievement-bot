@@ -9,5 +9,9 @@ public class BOOP extends BOP {
 	public BOOP(Database db) {
 		super(db);
 	}
+	
+	protected int getAchievementId() {
+		return 12;
+	}
 
 }

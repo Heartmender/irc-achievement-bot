@@ -37,7 +37,7 @@ public class TheAdvertiser extends Achievement {
 	protected boolean containsURL(String message) {
 		String[] parts = message.split("\\s");
 		for(String str : parts) try {
-			URL url = new URL(str);
+			new URL(str);
 			return true;
 		} catch (MalformedURLException e) {
 			// the str was not a URL

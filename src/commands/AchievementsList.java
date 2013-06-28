@@ -3,7 +3,7 @@ package commands;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.pircbotx.hooks.events.MessageEvent;
+import org.pircbotx.hooks.events.PrivateMessageEvent;
 
 import database.Database;
 
@@ -13,7 +13,7 @@ public class AchievementsList extends Command {
 		super(db);
 	}
 
-	public void onPrivateMessage(MessageEvent event) {
+	public void onPrivateMessage(PrivateMessageEvent event) {
 		String message = event.getMessage();
 		if(message.startsWith("!list")) {
 			String nick = event.getUser().getNick();

@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,11 +41,11 @@ public class Database {
 	public boolean hasAchievement(String nick, int achievementId) {
 		boolean hasAchievement = false;
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT id FROM users WHERE nick='" + nick + "'");
 			while(rs.next()) {
 				if(achievementId == rs.getInt("id")) {
@@ -86,11 +86,11 @@ public class Database {
 	 */
 	public void giveAchievement(String nick, int achievementId) {
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
-			stmt.executeUpdate("INSERT INTO users VALUES (" + achievementId + ", '" + nick + "'");
+			stmt = conn.createStatement();
+			stmt.executeUpdate("INSERT INTO users VALUES (" + achievementId + ", '" + nick + "')");
 		} catch (SQLException e) {
 			System.err.println("Error with giveAchievement db method with nick = " + nick + " and achievementId = " + achievementId);
 			System.err.println(e.getLocalizedMessage());
@@ -119,11 +119,11 @@ public class Database {
 	public String getAchievementName(int achievementId) {
 		String achievementName = null;
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT name FROM achievements WHERE id=" + achievementId);
 			if(rs.next()) { // should only be one result
 				achievementName = rs.getString("name");
@@ -162,11 +162,11 @@ public class Database {
 	public int getAchievementPoints(int achievementId) {
 		int achievementPoints = 0;
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT points FROM achievements WHERE id=" + achievementId);
 			if(rs.next()) { // should only be one result
 				achievementPoints = rs.getInt("points");
@@ -205,12 +205,12 @@ public class Database {
 	public String getAchievementDescription(int achievementId) {
 		String achievementDescription = null;
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
-			rs = stmt.executeQuery("SELECT name FROM achievements WHERE id=" + achievementId);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("SELECT description FROM achievements WHERE id=" + achievementId);
 			if(rs.next()) { // should only be one result
 				achievementDescription = rs.getString("description");
 			}
@@ -248,10 +248,10 @@ public class Database {
 	public void increaseCount(String nick, int achievementId) {
 		int numberOfPoints = getCount(nick, achievementId);
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			if (numberOfPoints == 0) { // case where we have to insert a new value
 				stmt.executeUpdate("INSERT INTO tracker VALUES (" + achievementId + ", '" + nick + "', 1)");
 			} else { // case where we have to update a value
@@ -285,11 +285,11 @@ public class Database {
 	public int getCount(String nick, int achievementId) {
 		int numberOfPoints = 0;
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT count FROM tracker WHERE id=" + achievementId + " AND nick='" + nick + "'");
 			if(rs.next()) { // should only be one result 
 				numberOfPoints = rs.getInt("count");
@@ -330,10 +330,10 @@ public class Database {
 			long givenTimeStamp) {
 		long timeStamp = getTimeStamp(achievementId, nick);
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			if(timeStamp == 0) { // case where we have to insert a new value
 				stmt.executeUpdate("INSERT INTO timestamp VALUES (" + achievementId + ", '" + nick + "', " + givenTimeStamp + ")");
 			} else { // case where we have to update a value
@@ -367,11 +367,11 @@ public class Database {
 	public long getTimeStamp(int achievementId, String nick) {
 		long timeStamp = 0;
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT timestamp FROM timestamp WHERE id=" + achievementId + " AND nick='" + nick + "'");
 			if (rs.next()) { // should only be one result
 				timeStamp = rs.getLong("timestamp");
@@ -410,12 +410,12 @@ public class Database {
 	public String getLargestCount(int achievementId) {
 		String nick = null;
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			int currentLargest = 0;
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT nick,count FROM tracker WHERE id=" + achievementId);
 			while(rs.next()) {
 				int count = rs.getInt("count");
@@ -455,10 +455,10 @@ public class Database {
 	 */
 	public void clearCounts(int achievementId) {
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			stmt.executeUpdate("DELETE FROM tracker WHERE id=" + achievementId);
 		} catch (SQLException e) {
 			System.err.println("Error with clearCounts db method achievementId = " + achievementId);
@@ -488,11 +488,11 @@ public class Database {
 		int points = 0;
 		List<Integer> achievements = getUserAchievements(nick);
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT id,points from achievements");
 			while(rs.next()) {
 				if(achievements.contains(rs.getInt("id"))) {
@@ -533,11 +533,11 @@ public class Database {
 	public List<Integer> getUserAchievements(String nick) {
 		List<Integer> achievements = new LinkedList<Integer>();
 		Connection conn = null;
-		PreparedStatement stmt = null;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
-			stmt = (PreparedStatement) conn.createStatement();
+			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT id FROM users WHERE nick='" + nick + "'");
 			while(rs.next()) {
 				achievements.add(rs.getInt("id"));

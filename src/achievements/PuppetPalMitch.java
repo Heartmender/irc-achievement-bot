@@ -9,5 +9,9 @@ public class PuppetPalMitch extends BOP {
 	public PuppetPalMitch(Database db) {
 		super(db);
 	}
+	
+	protected int getAchievementId() {
+		return 13;
+	}
 
 }

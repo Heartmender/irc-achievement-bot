@@ -39,6 +39,7 @@ public class IRCBot {
 			System.exit(1);
 		}
 		bot.sendMessage("NickServ", "IDENTIFY " + args[0]);
+		bot.sendMessage("HostServ", "ON"); // attempt to turn on our VHOST
 		while(true); // run until forcibly killed
 	}
 	
