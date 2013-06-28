@@ -5,12 +5,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
-
-import com.mysql.jdbc.Driver;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Database {
 	
 	private static Database instance = null;
+	
 	private static final String CONNECT_STRING = "jdbc:mysql://localhost/achievement_bot?"
 			+ "user=achievement&password=bot";
 	
@@ -37,7 +38,7 @@ public class Database {
 	 * @return true if the specified nick has already earned this achievement, false otherwise
 	 * @throws SQLException when things go poorly.
 	 */
-	public boolean hasAchievement(String nick, int achievementId) throws SQLException {
+	public boolean hasAchievement(String nick, int achievementId) {
 		boolean hasAchievement = false;
 		Connection conn = null;
 		PreparedStatement stmt = null;
@@ -45,7 +46,7 @@ public class Database {
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
 			stmt = (PreparedStatement) conn.createStatement();
-			rs = stmt.executeQuery("SELECT id FROM users WHERE nick='" + nick + "';");
+			rs = stmt.executeQuery("SELECT id FROM users WHERE nick='" + nick + "'");
 			while(rs.next()) {
 				if(achievementId == rs.getInt("id")) {
 					hasAchievement = true;
@@ -53,6 +54,7 @@ public class Database {
 				}
 			}
 		} catch (SQLException e) {
+			System.err.println("Error with hasAchievement db method with nick = " + nick + " and achievementId = " + achievementId);
 			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (rs != null) {
@@ -88,8 +90,9 @@ public class Database {
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
 			stmt = (PreparedStatement) conn.createStatement();
-			stmt.executeUpdate("INSERT INTO users VALUES (" + achievementId + ", '" + nick + "';");
+			stmt.executeUpdate("INSERT INTO users VALUES (" + achievementId + ", '" + nick + "'");
 		} catch (SQLException e) {
+			System.err.println("Error with giveAchievement db method with nick = " + nick + " and achievementId = " + achievementId);
 			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (stmt != null) {
@@ -121,11 +124,12 @@ public class Database {
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
 			stmt = (PreparedStatement) conn.createStatement();
-			rs = stmt.executeQuery("SELECT name FROM achievements WHERE id=" + achievementId + ";");
+			rs = stmt.executeQuery("SELECT name FROM achievements WHERE id=" + achievementId);
 			if(rs.next()) { // should only be one result
 				achievementName = rs.getString("name");
 			}
 		} catch (SQLException e) {
+			System.err.println("Error with getAchievementName db method with achievementId = " + achievementId);
 			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (rs != null) {
@@ -163,11 +167,12 @@ public class Database {
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
 			stmt = (PreparedStatement) conn.createStatement();
-			rs = stmt.executeQuery("SELECT points FROM achievements WHERE id=" + achievementId + ";");
+			rs = stmt.executeQuery("SELECT points FROM achievements WHERE id=" + achievementId);
 			if(rs.next()) { // should only be one result
 				achievementPoints = rs.getInt("points");
 			}
 		} catch (SQLException e) {
+			System.err.println("Error with getAchievementPoints db method with achievementId = " + achievementId);
 			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (rs != null) {
@@ -205,11 +210,12 @@ public class Database {
 		try {
 			conn = DriverManager.getConnection(CONNECT_STRING);
 			stmt = (PreparedStatement) conn.createStatement();
-			rs = stmt.executeQuery("SELECT name FROM achievements WHERE id=" + achievementId + ";");
+			rs = stmt.executeQuery("SELECT name FROM achievements WHERE id=" + achievementId);
 			if(rs.next()) { // should only be one result
 				achievementDescription = rs.getString("description");
 			}
 		} catch (SQLException e) {
+			System.err.println("Error with getAchievementDescription db method with achievementId = " + achievementId);
 			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (rs != null) {
@@ -252,6 +258,7 @@ public class Database {
 				stmt.executeUpdate("UPDATE tracker SET count=" + (numberOfPoints + 1) + " WHERE id=" + achievementId + " AND nick='" + nick + "'");
 			}
 		} catch (SQLException e) {
+			System.err.println("Error with increaseCount db method with nick = " + nick + " and achievementId = " + achievementId);
 			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (stmt != null) {
@@ -288,6 +295,7 @@ public class Database {
 				numberOfPoints = rs.getInt("count");
 			}
 		} catch (SQLException e) {
+			System.err.println("Error with getCount db method with nick = " + nick + " and achievementId = " + achievementId);
 			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (rs != null) {
@@ -312,6 +320,12 @@ public class Database {
 		return numberOfPoints;
 	}
 
+	/**
+	 * Associates the given timestamp with the given achievement id and nick.
+	 * @param achievementId the achievement id to associate the timestamp with
+	 * @param nick the nick to associate the timestamp with
+	 * @param givenTimeStamp the timestamp to associate with the nick and achievement id
+	 */
 	public void setTimeStamp(int achievementId, String nick,
 			long givenTimeStamp) {
 		long timeStamp = getTimeStamp(achievementId, nick);
@@ -326,6 +340,7 @@ public class Database {
 				stmt.executeUpdate("UPDATE timestamp SET timestamp=" + givenTimeStamp + " WHERE id=" + achievementId + " AND nick='" + nick + "'");
 			}
 		} catch (SQLException e) {
+			System.err.println("Error with setTimeStamp db method with nick = " + nick + " and achievementId = " + achievementId + " and timeStamp = " + givenTimeStamp);
 			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (stmt != null) {
@@ -362,6 +377,7 @@ public class Database {
 				timeStamp = rs.getLong("timestamp");
 			}
 		} catch (SQLException e) {
+			System.err.println("Error with getTimeStamp db method with nick = " + nick + " and achievementId = " + achievementId);
 			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (rs != null) {
@@ -386,14 +402,170 @@ public class Database {
 		return timeStamp;
 	}
 
+	/**
+	 * Gets the nick associated with the largest count value for a specified achievement id.
+	 * @param achievementId the specified achievement id
+	 * @return The nick in question or null if no such nick exists.
+	 */
 	public String getLargestCount(int achievementId) {
-		// TODO Auto-generated method stub
-		return null;
+		String nick = null;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			int currentLargest = 0;
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = (PreparedStatement) conn.createStatement();
+			rs = stmt.executeQuery("SELECT nick,count FROM tracker WHERE id=" + achievementId);
+			while(rs.next()) {
+				int count = rs.getInt("count");
+				if (count > currentLargest) {
+					nick = rs.getString("nick");
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Error with getLargestCount db method with achievementId = " + achievementId);
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { } // ignore
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
+		return nick;
 	}
 
+	/**
+	 * Clears all the counts associated with a specific achievementId.
+	 * @param achievementId the achievement id to clear counts for
+	 */
 	public void clearCounts(int achievementId) {
-		// TODO Auto-generated method stub
-		
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = (PreparedStatement) conn.createStatement();
+			stmt.executeUpdate("DELETE FROM tracker WHERE id=" + achievementId);
+		} catch (SQLException e) {
+			System.err.println("Error with clearCounts db method achievementId = " + achievementId);
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
+	}
+
+	/**
+	 * Get the number of points that a user has.
+	 * @param nick the nick to get the number of points for
+	 * @return the number of points that a user has
+	 */
+	public int getUserPoints(String nick) {
+		int points = 0;
+		List<Integer> achievements = getUserAchievements(nick);
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = (PreparedStatement) conn.createStatement();
+			rs = stmt.executeQuery("SELECT id,points from achievements");
+			while(rs.next()) {
+				if(achievements.contains(rs.getInt("id"))) {
+					points += rs.getInt("points");
+				}
+			}
+		} catch (SQLException e) {
+			System.err.println("Error with getUserPoints db method where nick = " + nick);
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { } // ignore
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
+		return points;
+	}
+	
+	/**
+	 * Get a list of achievementIds that a user has been awarded.
+	 * @param nick the nick to get achievementIds for
+	 * @return a list of achievementIds that a user has been awarded
+	 */
+	public List<Integer> getUserAchievements(String nick) {
+		List<Integer> achievements = new LinkedList<Integer>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = (PreparedStatement) conn.createStatement();
+			rs = stmt.executeQuery("SELECT id FROM users WHERE nick='" + nick + "'");
+			while(rs.next()) {
+				achievements.add(rs.getInt("id"));
+			}
+		} catch (SQLException e) {
+			System.err.println("Error with getUserAchievements db method where nick = " + nick);
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { } // ignore
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
+		return achievements;
 	}
 
 }

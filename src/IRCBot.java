@@ -1,27 +1,30 @@
-import java.io.IOException;
-
 import org.pircbotx.PircBotX;
-import org.pircbotx.exception.IrcException;
 import org.pircbotx.exception.NickAlreadyInUseException;
 
 import database.Database;
 
 import achievements.*;
+import commands.*;
 
 
 public class IRCBot {
 
+	/**
+	 * IRCBot takes the NickServ password as an argument via CLI.
+	 */
 	public static void main(String[] args) {
+		if(args.length < 1 || args.length > 1) {
+			System.err.println("This program requires that the NickServ pass be the only argument.");
+			System.exit(1);
+		}
 		PircBotX bot = new PircBotX();
 		Database db = null;
 		try {
 			db = Database.getInstance();
-		} catch (InstantiationException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("Unable to load JDBC driver, so unable to continue execution of program. Sorry :(");
+			System.err.println(e.getLocalizedMessage());
+			System.exit(1);
 		}
 		setUpBot(bot);
 		addModules(bot, db);
@@ -29,12 +32,14 @@ public class IRCBot {
 			bot.connect("irc.us.ponychat.net");
 			bot.joinChannel("#tulpa");
 		} catch (NickAlreadyInUseException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (IrcException e) {
-			e.printStackTrace();
+			System.err.println("Our nick is already in use! :(");
+			System.exit(1);
+		} catch (Exception e) {
+			System.err.println(e.getLocalizedMessage());
+			System.exit(1);
 		}
+		bot.sendMessage("NickServ", "IDENTIFY " + args[0]);
+		while(true); // run until forcibly killed
 	}
 	
 	/**
@@ -43,7 +48,7 @@ public class IRCBot {
 	 */
 	private static void setUpBot(PircBotX bot) {
 		bot.setName("AchievementBot");
-		bot.setLogin("AchievementBot");
+		bot.setLogin("Two");
 		bot.setVersion("AchievementBot v. 1.00");
 		bot.setFinger("Hey! Save that for the second date <3");
 		bot.setAutoReconnect(true);
@@ -70,7 +75,8 @@ public class IRCBot {
 		bot.getListenerManager().addListener(new ForeverAlone(db));
 		
 		/* commands */
-		
+		bot.getListenerManager().addListener(new AchievementsList(db));
+		bot.getListenerManager().addListener(new Score(db));
 	}
 	
 }
