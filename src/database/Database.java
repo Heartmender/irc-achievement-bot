@@ -238,8 +238,33 @@ public class Database {
 	 * @param achievementId the associated achievement id
 	 */
 	public void increaseCount(String nick, int achievementId) {
-		// TODO Auto-generated method stub
-		
+		int numberOfPoints = getCount(nick, achievementId);
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = conn.createStatement();
+			if (numberOfPoints == 0) { // case where we have to insert a new value
+				stmt.executeUpdate("INSERT INTO tracker VALUES (" + achievementId + ", '" + nick + "', 1)");
+			} else { // case where we have ot update a value
+				stmt.executeUpdate("UPDATE tracker SET count=" + (numberOfPoints + 1) + " WHERE id=" + achievementId + " AND nick='" + nick + "'");
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
 	}
 
 	/**
@@ -249,8 +274,40 @@ public class Database {
 	 * @return the count stored in the tracker
 	 */
 	public int getCount(String nick, int achievementId) {
-		// TODO Auto-generated method stub
-		return 0;
+		int numberOfPoints = 0;
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("SELECT count FROM tracker WHERE id=" + achievementId + " AND nick='" + nick + "'");
+			if(rs.next()) { // should only be one result 
+				numberOfPoints = rs.getInt("count");
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { } // ignore
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
+		return numberOfPoints;
 	}
 
 	public void setTimeStamp(int achievementId, String string,
