@@ -51,7 +51,7 @@ public class Database {
 				}
 			}
 		} catch (SQLException e) {
-			throw e;
+			System.err.println(e.getLocalizedMessage());
 		} finally {
 			if (rs != null) {
 				try {
@@ -81,7 +81,28 @@ public class Database {
 	 * @param achievementId the specified achievement id
 	 */
 	public void giveAchievement(String nick, int achievementId) {
-		// TODO Auto-generated method stub
+		Connection conn = null;
+		Statement stmt = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = conn.createStatement();
+			stmt.executeUpdate("INSERT INTO users VALUES (" + achievementId + ", '" + nick + "';");
+		} catch (SQLException e) {
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
 		
 	}
 
@@ -91,8 +112,40 @@ public class Database {
 	 * @return the name of the achievement
 	 */
 	public String getAchievementName(int achievementId) {
-		// TODO Auto-generated method stub
-		return null;
+		String achievementName = null;
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("SELECT name FROM achievements WHERE id=" + achievementId + ";");
+			if(rs.next()) { // should only be one result
+				achievementName = rs.getString("name");
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { } // ignore
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
+		return achievementName;
 	}
 
 	/**
@@ -101,8 +154,40 @@ public class Database {
 	 * @return the points associated with the achievement
 	 */
 	public int getAchievementPoints(int achievementId) {
-		// TODO Auto-generated method stub
-		return 0;
+		int achievementPoints = 0;
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("SELECT points FROM achievements WHERE id=" + achievementId + ";");
+			if(rs.next()) { // should only be one result
+				achievementPoints = rs.getInt("points");
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { } // ignore
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
+		return achievementPoints;
 	}
 
 	/**
@@ -111,8 +196,40 @@ public class Database {
 	 * @return the description associated with the achievement
 	 */
 	public String getAchievementDescription(int achievementId) {
-		// TODO Auto-generated method stub
-		return null;
+		String achievementDescription = null;
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			conn = DriverManager.getConnection(CONNECT_STRING);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery("SELECT name FROM achievements WHERE id=" + achievementId + ";");
+			if(rs.next()) { // should only be one result
+				achievementDescription = rs.getString("description");
+			}
+		} catch (SQLException e) {
+			System.err.println(e.getLocalizedMessage());
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) { } // ignore
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) { } // ignore
+				stmt = null;
+			}
+			if (conn != null) {
+				try {
+					conn.close();
+				} catch (SQLException e) { } // ignore
+				conn = null;
+			}
+		}
+		return achievementDescription;
 	}
 
 	/**
