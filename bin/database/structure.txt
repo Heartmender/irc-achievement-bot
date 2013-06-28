@@ -9,3 +9,6 @@ id, nick
 
 Tbl: tracker // to track ongoing achievements
 id, nick, count
+
+Tbl: timestamp // to track timestamping
+id, nick, timestamp

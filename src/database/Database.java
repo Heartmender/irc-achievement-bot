@@ -91,4 +91,25 @@ public class Database {
 		return 0;
 	}
 
+	public void setTimeStamp(int achievementId, String string,
+			long currentTimeMillis) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public long getTimeStamp(int achievementId, String string) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public String getLargestCount(int achievementId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void clearCounts(int achievementId) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
