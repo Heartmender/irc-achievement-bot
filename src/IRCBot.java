@@ -54,7 +54,7 @@ public class IRCBot {
 	private static void setUpBot(PircBotX bot) {
 		bot.setName("AchievementBot");
 		bot.setLogin("Two");
-		bot.setVersion("AchievementBot v. 1.01");
+		bot.setVersion("AchievementBot v. 1.02");
 		bot.setFinger("Hey! Save that for the second date <3");
 		bot.setAutoReconnect(true);
 		bot.setAutoReconnectChannels(true);
