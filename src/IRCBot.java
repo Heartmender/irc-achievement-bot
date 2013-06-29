@@ -50,7 +50,7 @@ public class IRCBot {
 	private static void setUpBot(PircBotX bot) {
 		bot.setName("AchievementBot");
 		bot.setLogin("Two");
-		bot.setVersion("AchievementBot v. 1.00");
+		bot.setVersion("AchievementBot v. 1.01");
 		bot.setFinger("Hey! Save that for the second date <3");
 		bot.setAutoReconnect(true);
 		bot.setAutoReconnectChannels(true);
@@ -74,9 +74,13 @@ public class IRCBot {
 		bot.getListenerManager().addListener(new PopularityContest(db));
 		bot.getListenerManager().addListener(new AttentionWhore(db));
 		bot.getListenerManager().addListener(new ForeverAlone(db));
+		bot.getListenerManager().addListener(new Actor(db));
+		bot.getListenerManager().addListener(new TheManyMoods(db));
 		
 		/* commands */
 		bot.getListenerManager().addListener(new AchievementsList(db));
+		bot.getListenerManager().addListener(new Help(db));
+		bot.getListenerManager().addListener(new Say(db));
 		bot.getListenerManager().addListener(new Score(db));
 	}
 	

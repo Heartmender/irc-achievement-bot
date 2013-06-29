@@ -18,3 +18,5 @@ The items in this list are in the following form:
 11 - BOP - 10 - Say 'bop' or 'boop' 100 times.
 12 - BOOP - 25 - Say 'bop' or 'boop' 1000 times.
 13 - Puppet Pal Mitch - Say 'bop' or 'boop' 10000 times.
+14 - Actor - 5 - Use the /me command 10 times.
+15 - The Many Moods - 5 - Post 10 emoticons.
