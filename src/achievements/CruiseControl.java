@@ -36,7 +36,7 @@ public class CruiseControl extends Achievement {
 	
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
-		if(message.toUpperCase().equals(message)) { // is the message capitalized?
+		if(message.toUpperCase().equals(message) && stringContainsAlpha(message)) { // is the message capitalized & contains alpha chars?
 			String nick = event.getUser().getNick();
 			if(messageTracker.containsKey(nick)) { // do we have a previous capitalized event?
 				String prevMessage = messageTracker.get(nick).message;
@@ -61,6 +61,15 @@ public class CruiseControl extends Achievement {
 			}
 		}
 	}
+	
+	public boolean stringContainsAlpha(String str) {
+		for(int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if(c >= 'a' && c <= 'z') return true;
+			else if(c >= 'A' && c <= 'Z') return true;
+		}
+		return false;
+ 	}
 
 	
 }
