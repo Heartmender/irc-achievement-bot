@@ -13,13 +13,13 @@ public class Score extends Command {
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		if(message.startsWith("!score")) {
-			if(message.equals("!score")) { // the user is looking up his own score
+			if(message.equals("!score")) { // the user is looking up their own score
 				String nick = event.getUser().getNick();
 				event.respond(getScoreString(nick, db.getUserPoints(nick)));
 			} else { // the user is looking up a nick's score
 				String[] split = message.split("//s");
 				if(split.length < 2) {
-					/* fallback behavior - the user is looking up his own score */
+					/* fallback behavior - the user is looking up their own score */
 					String nick = event.getUser().getNick();
 					event.respond(getScoreString(nick, db.getUserPoints(nick)));
 				} else if (split.length == 2) {

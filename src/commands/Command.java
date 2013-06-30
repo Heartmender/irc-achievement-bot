@@ -44,7 +44,7 @@ public class Command extends ListenerAdapter {
 	
 	/*
 	 * I didn't use a database method because I suspect I will only ever be the only authorized user.
-	 * Obivously this could be changed.
+	 * Obviously this should be changed in your installation, or a configuration option.
 	 */
 	private void loadAuthorizedUsers() {
 		authorizedUsers.add(new AuthorizedUser("jaderain", "i.am.secretly.a.robot"));
