@@ -23,7 +23,7 @@ public class TheManyMoods extends Achievement {
 			if(db.getCount(nick, getAchievementId()) >= 10) {
 				if(!db.hasAchievement(nick, getAchievementId())) {
 					db.giveAchievement(nick, getAchievementId());
-					event.getBot().sendMessage(event.getChannel().getName(), getAwardString(nick));
+					event.getBot().sendNotice(event.getUser(), getAwardString(nick));
 				}
 			}
 		}

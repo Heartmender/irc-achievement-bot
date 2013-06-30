@@ -23,7 +23,7 @@ public class AttentionWhore extends Achievement {
 			db.clearCounts(getAchievementId());
 			if(!db.hasAchievement(nick, getAchievementId())) {
 				db.giveAchievement(nick, getAchievementId());
-				event.getBot().sendMessage(event.getChannel().getName(), getAwardString(nick));
+				event.getBot().sendNotice(event.getUser(), getAwardString(nick));
 			}
 			setTimeStamp();
 		}

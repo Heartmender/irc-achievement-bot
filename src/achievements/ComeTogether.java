@@ -30,7 +30,7 @@ public class ComeTogether extends Achievement {
 		if(pingCount >= 5) {
 			if(!db.hasAchievement(event.getUser().getNick(), getAchievementId())) {
 				db.giveAchievement(event.getUser().getNick(), getAchievementId());
-				event.getBot().sendMessage(event.getChannel().getName(), getAwardString(event.getUser().getNick()));
+				event.getBot().sendNotice(event.getUser(), getAwardString(event.getUser().getNick()));
 			}
 		}
 	}

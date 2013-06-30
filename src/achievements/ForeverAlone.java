@@ -28,7 +28,7 @@ public class ForeverAlone extends Achievement {
 		if (count >= 10) {
 			if(!db.hasAchievement(nick, getAchievementId())) {
 				db.giveAchievement(nick, getAchievementId());
-				event.getBot().sendMessage(event.getChannel().getName(), getAwardString(nick));
+				event.getBot().sendNotice(event.getUser(), getAwardString(nick));
 			}
 		}
 	}

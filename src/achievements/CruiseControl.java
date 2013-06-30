@@ -46,7 +46,7 @@ public class CruiseControl extends Achievement {
 						/* achievement awarded */
 						if(!db.hasAchievement(nick, getAchievementId())) { // award if the user didn't already have it
 							db.giveAchievement(nick, getAchievementId());
-							event.getBot().sendMessage(event.getChannel().getName(), getAwardString(nick));
+							event.getBot().sendNotice(event.getUser(), getAwardString(nick));
 						}
 					}
 				}
