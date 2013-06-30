@@ -18,10 +18,13 @@ public class IRCBot {
 	 * IRCBot takes the NickServ password as an argument via CLI.
 	 */
 	public static void main(String[] args) {
+		
 		if(args.length < 1 || args.length > 1) {
 			System.err.println("This program requires that the NickServ pass be the only argument.");
 			System.exit(1);
 		}
+		
+		/* start the bot and connect to the network */
 		PircBotX bot = new PircBotX();
 		setUpBot(bot);
 		try {
@@ -42,6 +45,10 @@ public class IRCBot {
 			System.err.println(e.getLocalizedMessage());
 			System.exit(1);
 		}
+		bot.sendMessage("NickServ", "IDENTIFY " + args[0]);
+		bot.sendMessage("HostServ", "ON"); // attempt to turn on our VHOST
+		
+		/* start the database */
 		Database db = null;
 		try {
 			db = Database.getInstance(bot);
@@ -50,9 +57,22 @@ public class IRCBot {
 			System.err.println(e.getLocalizedMessage());
 			System.exit(1);
 		}
-		bot.sendMessage("NickServ", "IDENTIFY " + args[0]);
-		bot.sendMessage("HostServ", "ON"); // attempt to turn on our VHOST
+
+		/* start record keeping for users */
+		UserRecords userRecords = UserRecords.getInstance();
+		userRecords.setBot(bot);
+		try {
+			userRecords.loadUsers();
+		} catch (Exception e) {
+			System.err.println("We couldn't load the user records! :(");
+			System.err.println(e.getLocalizedMessage());
+			System.exit(1);
+		}
+		
+		/* add the modules */
 		addModules(bot, db);
+		
+		/* running loop */
 		while(RUNNING) { // run until forcibly terminated
 			if(!RUNNING) {
 				bot.quitServer("Going down for maintenance!");
@@ -99,15 +119,13 @@ public class IRCBot {
 		bot.getListenerManager().addListener(new ForeverAlone(db));
 		bot.getListenerManager().addListener(new Actor(db));
 		bot.getListenerManager().addListener(new TheManyMoods(db));
+		bot.getListenerManager().addListener(new ComeTogether(db));
 		
 		/* commands */
 		bot.getListenerManager().addListener(new AchievementsList(db));
 		bot.getListenerManager().addListener(new Help(db));
 		bot.getListenerManager().addListener(new Say(db));
 		bot.getListenerManager().addListener(new Score(db));
-		
-		/* user records */
-		bot.getListenerManager().addListener(UserRecords.getInstance(bot));
 	}
 	
 }

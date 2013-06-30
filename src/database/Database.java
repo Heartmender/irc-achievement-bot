@@ -43,7 +43,7 @@ public class Database {
 	 * @throws SQLException when things go poorly.
 	 */
 	public boolean hasAchievement(String nick, int achievementId) {
-		nick = UserRecords.getInstance(bot).getActualName(nick);
+		nick = UserRecords.getInstance().getActualName(nick);
 		boolean hasAchievement = false;
 		Connection conn = null;
 		Statement stmt = null;
@@ -90,7 +90,7 @@ public class Database {
 	 * @param achievementId the specified achievement id
 	 */
 	public void giveAchievement(String nick, int achievementId) {
-		nick = UserRecords.getInstance(bot).getActualName(nick);
+		nick = UserRecords.getInstance().getActualName(nick);
 		Connection conn = null;
 		Statement stmt = null;
 		try {
@@ -252,7 +252,7 @@ public class Database {
 	 * @param achievementId the associated achievement id
 	 */
 	public void increaseCount(String nick, int achievementId) {
-		nick = UserRecords.getInstance(bot).getActualName(nick);
+		nick = UserRecords.getInstance().getActualName(nick);
 		int numberOfPoints = getCount(nick, achievementId);
 		Connection conn = null;
 		Statement stmt = null;
@@ -290,7 +290,7 @@ public class Database {
 	 * @return the count stored in the tracker
 	 */
 	public int getCount(String nick, int achievementId) {
-		nick = UserRecords.getInstance(bot).getActualName(nick);
+		nick = UserRecords.getInstance().getActualName(nick);
 		int numberOfPoints = 0;
 		Connection conn = null;
 		Statement stmt = null;
@@ -336,7 +336,7 @@ public class Database {
 	 */
 	public void setTimeStamp(int achievementId, String nick,
 			long givenTimeStamp) {
-		nick = UserRecords.getInstance(bot).getActualName(nick);
+		nick = UserRecords.getInstance().getActualName(nick);
 		long timeStamp = getTimeStamp(achievementId, nick);
 		Connection conn = null;
 		Statement stmt = null;
@@ -374,7 +374,7 @@ public class Database {
 	 * @return the epoch time in milliseconds, or 0 if something went wrong
 	 */
 	public long getTimeStamp(int achievementId, String nick) {
-		nick = UserRecords.getInstance(bot).getActualName(nick);
+		nick = UserRecords.getInstance().getActualName(nick);
 		long timeStamp = 0;
 		Connection conn = null;
 		Statement stmt = null;
@@ -495,7 +495,7 @@ public class Database {
 	 * @return the number of points that a user has
 	 */
 	public int getUserPoints(String nick) {
-		nick = UserRecords.getInstance(bot).getActualName(nick);
+		nick = UserRecords.getInstance().getActualName(nick);
 		int points = 0;
 		List<Integer> achievements = getUserAchievements(nick);
 		Connection conn = null;
@@ -542,7 +542,7 @@ public class Database {
 	 * @return a list of achievementIds that a user has been awarded
 	 */
 	public List<Integer> getUserAchievements(String nick) {
-		nick = UserRecords.getInstance(bot).getActualName(nick);
+		nick = UserRecords.getInstance().getActualName(nick);
 		List<Integer> achievements = new LinkedList<Integer>();
 		Connection conn = null;
 		Statement stmt = null;
