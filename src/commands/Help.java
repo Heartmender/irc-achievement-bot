@@ -13,7 +13,7 @@ public class Help extends Command {
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
 		if(message.startsWith("!help")) {
-			event.respond("Information on my features can be found here: https://raw.github.com/jaderain/irc-achievement-bot/master/README.md");
+			event.getBot().sendNotice(event.getUser(), "Information on my features can be found here: https://raw.github.com/jaderain/irc-achievement-bot/master/README.md");
 		}
 	}
 

@@ -15,19 +15,19 @@ public class Score extends Command {
 		if(message.startsWith("!score")) {
 			if(message.equals("!score")) { // the user is looking up their own score
 				String nick = event.getUser().getNick();
-				event.respond(getScoreString(nick, db.getUserPoints(nick)));
+				event.getBot().sendNotice(event.getUser(), getScoreString(nick, db.getUserPoints(nick)));
 			} else { // the user is looking up a nick's score
 				String[] split = message.split("//s");
 				if(split.length < 2) {
 					/* fallback behavior - the user is looking up their own score */
 					String nick = event.getUser().getNick();
-					event.respond(getScoreString(nick, db.getUserPoints(nick)));
+					event.getBot().sendNotice(event.getUser(), getScoreString(nick, db.getUserPoints(nick)));
 				} else if (split.length == 2) {
-					event.respond(getScoreString(split[1], db.getUserPoints(split[1])));
+					event.getBot().sendNotice(event.getUser(), getScoreString(split[1], db.getUserPoints(split[1])));
 				} else if (split.length == 3) {
-					event.respond(getComparisonString(split[1], db.getUserPoints(split[1]), split[2], db.getUserPoints(split[2])));
+					event.getBot().sendNotice(event.getUser(), getComparisonString(split[1], db.getUserPoints(split[1]), split[2], db.getUserPoints(split[2])));
 				} else if (split.length > 3) {
-					event.respond("I can only compare up to two users at once! D:");
+					event.getBot().sendNotice(event.getUser(), "I can only compare up to two users at once! D:");
 				}
 			}
 		}

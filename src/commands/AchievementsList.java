@@ -26,15 +26,15 @@ public class AchievementsList extends Command {
 	}
 	
 	public List<String> getAchievementListString(List<Integer> achievementIds) {
-		List<String> award = new LinkedList<String>();
-		award.add("You have the following achievements:");
+		List<String> awardList = new LinkedList<String>();
+		awardList.add("You have the following achievements:");
 		for(Integer id : achievementIds) {
 			String achievementName = db.getAchievementName(id);
 			int achievementPoints = db.getAchievementPoints(id);
 			String achievementDescription = db.getAchievementDescription(id);
-			award.add(achievementName + " [" + achievementPoints + "] - " + achievementDescription);
+			awardList.add(achievementName + " [" + achievementPoints + "] - " + achievementDescription);
 		}
-		return award;
+		return awardList;
 	}
 	
 }
