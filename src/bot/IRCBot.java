@@ -10,14 +10,14 @@ import commands.*;
 
 public class IRCBot {
 	
-	public static final String IRC_NETWORK = "irc.us.ponychat.net";
-	public static final String[] IRC_CHANNELS = { "#tulpa" };
+	public static final String IRC_NETWORK = "127.0.0.1";
+	public static final String[] IRC_CHANNELS = { "#test" };
+	public static final String NICK = "AchievementBot";
 
 	/**
 	 * IRCBot takes the NickServ password as an argument via CLI.
 	 */
 	public static void main(String[] args) {
-		
 		if(args.length < 1 || args.length > 1) {
 			System.err.println("This program requires that the NickServ pass be the only argument.");
 			System.exit(1);
@@ -33,7 +33,7 @@ public class IRCBot {
 			}
 		} catch (NickAlreadyInUseException e) {
 			try {
-				bot.sendMessage("NickServ", "GHOST AchievementBot " + args[0]);
+				bot.sendMessage("NickServ", "GHOST " + NICK + " " + args[0]);
 				Thread.sleep(1000);
 				bot.setName("AchievementBot");
 			} catch (Exception ex) {
@@ -77,7 +77,7 @@ public class IRCBot {
 	 * @param bot the bot to configure settings for
 	 */
 	private static void setUpBot(PircBotX bot) {
-		bot.setName("AchievementBot");
+		bot.setName(NICK);
 		bot.setLogin("Two");
 		bot.setVersion("AchievementBot v. 1.06");
 		bot.setFinger("Hey! Save that for the second date <3");
