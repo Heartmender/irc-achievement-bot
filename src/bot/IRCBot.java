@@ -1,13 +1,17 @@
+package bot;
+
 import org.pircbotx.PircBotX;
 import org.pircbotx.exception.NickAlreadyInUseException;
 
-import database.Database;
-
+import database.*;
 import achievements.*;
 import commands.*;
 
 
 public class IRCBot {
+	
+	public static final String IRC_NETWORK = "irc.us.ponychat.net";
+	public static final String[] IRC_CHANNELS = { "#tulpa" };
 
 	/**
 	 * IRCBot takes the NickServ password as an argument via CLI.
@@ -17,7 +21,7 @@ public class IRCBot {
 			System.err.println("This program requires that the NickServ pass be the only argument.");
 			System.exit(1);
 		}
-		PircBotX bot = new PircBotX();
+		AchievementBot bot = AchievementBot.getInstance();
 		Database db = null;
 		try {
 			db = Database.getInstance();
@@ -29,18 +33,31 @@ public class IRCBot {
 		setUpBot(bot);
 		addModules(bot, db);
 		try {
-			bot.connect("irc.us.ponychat.net");
-			bot.joinChannel("#tulpa");
+			bot.connect(IRC_NETWORK);
+			for(String channel : IRC_CHANNELS) {
+				bot.joinChannel(channel);
+			}
 		} catch (NickAlreadyInUseException e) {
-			System.err.println("Our nick is already in use! :(");
-			System.exit(1);
+			try {
+				bot.sendMessage("NickServ", "GHOST AchievementBot " + args[0]);
+				Thread.sleep(1000);
+				bot.setName("AchievementBot");
+			} catch (Exception ex) {
+				System.err.println("Our nick is already in use, and we couldn't change to it! :(");
+				System.exit(1);
+			}
 		} catch (Exception e) {
 			System.err.println(e.getLocalizedMessage());
 			System.exit(1);
 		}
 		bot.sendMessage("NickServ", "IDENTIFY " + args[0]);
 		bot.sendMessage("HostServ", "ON"); // attempt to turn on our VHOST
-		while(true) { // run until forcibly terminated
+		while(bot.isRunning()) { // run until forcibly terminated
+			if(!bot.isRunning()) {
+				bot.quitServer("Going down for maintenance!");
+				bot.disconnect();
+				System.exit(0);
+			}
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) { } // ignore
@@ -54,8 +71,9 @@ public class IRCBot {
 	private static void setUpBot(PircBotX bot) {
 		bot.setName("AchievementBot");
 		bot.setLogin("Two");
-		bot.setVersion("AchievementBot v. 1.02");
+		bot.setVersion("AchievementBot v. 1.04");
 		bot.setFinger("Hey! Save that for the second date <3");
+		bot.setAutoNickChange(true);
 		bot.setAutoReconnect(true);
 		bot.setAutoReconnectChannels(true);
 		bot.setVerbose(true);
@@ -86,6 +104,9 @@ public class IRCBot {
 		bot.getListenerManager().addListener(new Help(db));
 		bot.getListenerManager().addListener(new Say(db));
 		bot.getListenerManager().addListener(new Score(db));
+		
+		/* user records */
+		bot.getListenerManager().addListener(UserRecords.getInstance());
 	}
 	
 }

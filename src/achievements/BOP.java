@@ -1,5 +1,6 @@
 package achievements;
 
+import org.pircbotx.hooks.events.ActionEvent;
 import org.pircbotx.hooks.events.MessageEvent;
 
 import database.Database;
@@ -25,7 +26,21 @@ public class BOP extends Achievement {
 			if(db.getCount(nick, getAchievementId()) >= COUNT) {
 				if(!db.hasAchievement(nick, getAchievementId())) {
 					db.giveAchievement(nick, getAchievementId());
-					event.respond(getAwardString(nick));
+					event.getBot().sendMessage(event.getChannel().getName(), getAwardString(nick));
+				}
+			}
+		}
+	}
+	
+	public void onAction(ActionEvent event) {
+		String message = event.getAction();
+		if(message.toLowerCase().contains("bop") || message.toLowerCase().contains("boop")) {
+			String nick = event.getUser().getNick();
+			db.increaseCount(nick, getAchievementId());
+			if(db.getCount(nick, getAchievementId()) >= COUNT) {
+				if(!db.hasAchievement(nick, getAchievementId())) {
+					db.giveAchievement(nick, getAchievementId());
+					event.getBot().sendMessage(event.getChannel().getName(), getAwardString(nick));
 				}
 			}
 		}

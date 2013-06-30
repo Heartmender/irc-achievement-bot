@@ -8,9 +8,9 @@ Channel Commands
 
 The bot currently allows for the following commands on channel:
 
-!score (username)
+!score (username1) (username2)
 
-The bot informs the channel of the number of points that the specified username has in achievements. If no username is provided, the presumption is that the user is querying his own points.
+The bot informs the channel of the number of points that the specified username has in achievements. If no username is provided, the presumption is that the user is querying his own points. If two usernames are provided, then a comparison is made between the two.
 
 !help
 

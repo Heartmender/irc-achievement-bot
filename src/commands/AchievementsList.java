@@ -4,11 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.pircbotx.hooks.events.PrivateMessageEvent;
-
 import database.Database;
 
 public class AchievementsList extends Command {
 
+	
 	public AchievementsList(Database db) {
 		super(db);
 	}
@@ -20,7 +20,7 @@ public class AchievementsList extends Command {
 			List<Integer> achievementIds = db.getUserAchievements(nick);
 			List<String> achievementList = getAchievementListString(achievementIds);
 			for(String response : achievementList) {
-				event.respond(response);
+				event.getBot().sendMessage(event.getUser(), response);
 			}	
 		}
 	}

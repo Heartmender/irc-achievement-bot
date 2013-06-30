@@ -24,7 +24,7 @@ public class Lollerskating extends Achievement {
 			if(db.getCount(nick, getAchievementId()) >= COUNT) {
 				if(!db.hasAchievement(nick, getAchievementId())) {
 					db.giveAchievement(nick, getAchievementId());
-					event.respond(getAwardString(nick));
+					event.getBot().sendMessage(event.getChannel().getName(), getAwardString(nick));
 				}
 			}
 		}

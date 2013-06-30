@@ -36,7 +36,7 @@ public class CruiseControl extends Achievement {
 	
 	public void onMessage(MessageEvent event) {
 		String message = event.getMessage();
-		if(message.toUpperCase().equals(message) && stringContainsAlpha(message)) { // is the message capitalized & contains alpha chars?
+		if(message.toUpperCase().equals(message) && stringContainsWord(message)) { // is the message capitalized & contains a word?
 			String nick = event.getUser().getNick();
 			if(messageTracker.containsKey(nick)) { // do we have a previous capitalized event?
 				String prevMessage = messageTracker.get(nick).message;
@@ -46,7 +46,7 @@ public class CruiseControl extends Achievement {
 						/* achievement awarded */
 						if(!db.hasAchievement(nick, getAchievementId())) { // award if the user didn't already have it
 							db.giveAchievement(nick, getAchievementId());
-							event.respond(getAwardString(nick));
+							event.getBot().sendMessage(event.getChannel().getName(), getAwardString(nick));
 						}
 					}
 				}
@@ -62,13 +62,14 @@ public class CruiseControl extends Achievement {
 		}
 	}
 	
-	public boolean stringContainsAlpha(String str) {
-		for(int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
-			if(c >= 'a' && c <= 'z') return true;
-			else if(c >= 'A' && c <= 'Z') return true;
-		}
-		return false;
+	/**
+	 * Returns true if the string contains at least one word.
+	 * @param str the string to test for words
+	 * @return true if the string contains at least one word, false otherwise
+	 */
+	public boolean stringContainsWord(String str) {
+		str = " " + str + " "; // creates spacing around the string to help identify individual words
+		return str.matches("(.*?)( )([A-Za-z]+)( )");
  	}
 
 	

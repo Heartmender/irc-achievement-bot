@@ -2,28 +2,22 @@ package commands;
 
 import org.pircbotx.hooks.events.PrivateMessageEvent;
 
-import bot.IRCBot;
-
+import bot.AchievementBot;
 import database.Database;
 
-public class Say extends Command {
-	
-	
-	public Say(Database db) {
+public class Shutdown extends Command {
+
+	public Shutdown(Database db) {
 		super(db);
 	}
 	
 	public void onPrivateMessage(PrivateMessageEvent event) {
 		String message = event.getMessage();
-		if(message.startsWith("!say")) {
+		if(message.startsWith("!shutdown")) {
 			if(this.isAuthorizedUser(event.getUser())) {
-				for(String channel : IRCBot.IRC_CHANNELS) {
-					event.getBot().sendMessage(channel, message.replaceFirst("!say", ""));
-				}
+				AchievementBot.getInstance().shutDownEverything();
 			}
 		}
 	}
 	
-
-
 }
