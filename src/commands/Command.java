@@ -23,7 +23,7 @@ public class Command extends ListenerAdapter {
 	 * @return true if the specified user is an authorized user, false otherwise
 	 */
 	protected boolean isAuthorizedUser(User user) {
-		return authorizedUsers.contains(new AuthorizedUser(user.getNick(), user.getHostmask()));
+		return authorizedUsers.contains(new AuthorizedUser(user.getNick(), user.getHostmask())) && user.isVerified();
 	}
 	
 	private class AuthorizedUser {
