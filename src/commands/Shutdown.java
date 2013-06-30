@@ -15,7 +15,7 @@ public class Shutdown extends Command {
 		String message = event.getMessage();
 		if(message.startsWith("!shutdown")) {
 			if(this.isAuthorizedUser(event.getUser())) {
-				event.getBot().quitServer("Going down for mainteance!");
+				event.getBot().quitServer("Going down for maintenance!");
 				event.getBot().disconnect();
 				System.exit(0);
 			}
