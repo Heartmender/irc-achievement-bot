@@ -12,7 +12,6 @@ public class IRCBot {
 	
 	public static final String IRC_NETWORK = "irc.us.ponychat.net";
 	public static final String[] IRC_CHANNELS = { "#tulpa" };
-	public static boolean RUNNING = true;
 
 	/**
 	 * IRCBot takes the NickServ password as an argument via CLI.
