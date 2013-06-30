@@ -8,14 +8,18 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.pircbotx.PircBotX;
+
 public class Database {
 	
+	private PircBotX bot;
 	private static Database instance = null;
 	
 	private static final String CONNECT_STRING = "jdbc:mysql://localhost/achievement_bot?"
 			+ "user=achievement&password=bot";
 	
-	private Database() throws InstantiationException, IllegalAccessException, ClassNotFoundException { 
+	private Database(PircBotX bot) throws InstantiationException, IllegalAccessException, ClassNotFoundException { 
+		this.bot = bot;
 		Class.forName("com.mysql.jdbc.Driver").newInstance();
 	}
 	
@@ -24,9 +28,9 @@ public class Database {
 	 * @return the singleton instance of this database
 	 * @throws Exceptions when things go poorly.
 	 */
-	public static Database getInstance() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+	public static Database getInstance(PircBotX bot) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
 		if(instance == null) {
-			instance = new Database();
+			instance = new Database(bot);
 		}
 		return instance;
 	}
@@ -39,7 +43,7 @@ public class Database {
 	 * @throws SQLException when things go poorly.
 	 */
 	public boolean hasAchievement(String nick, int achievementId) {
-		nick = UserRecords.getInstance().getActualName(nick);
+		nick = UserRecords.getInstance(bot).getActualName(nick);
 		boolean hasAchievement = false;
 		Connection conn = null;
 		Statement stmt = null;
@@ -86,7 +90,7 @@ public class Database {
 	 * @param achievementId the specified achievement id
 	 */
 	public void giveAchievement(String nick, int achievementId) {
-		nick = UserRecords.getInstance().getActualName(nick);
+		nick = UserRecords.getInstance(bot).getActualName(nick);
 		Connection conn = null;
 		Statement stmt = null;
 		try {
@@ -248,7 +252,7 @@ public class Database {
 	 * @param achievementId the associated achievement id
 	 */
 	public void increaseCount(String nick, int achievementId) {
-		nick = UserRecords.getInstance().getActualName(nick);
+		nick = UserRecords.getInstance(bot).getActualName(nick);
 		int numberOfPoints = getCount(nick, achievementId);
 		Connection conn = null;
 		Statement stmt = null;
@@ -286,7 +290,7 @@ public class Database {
 	 * @return the count stored in the tracker
 	 */
 	public int getCount(String nick, int achievementId) {
-		nick = UserRecords.getInstance().getActualName(nick);
+		nick = UserRecords.getInstance(bot).getActualName(nick);
 		int numberOfPoints = 0;
 		Connection conn = null;
 		Statement stmt = null;
@@ -332,7 +336,7 @@ public class Database {
 	 */
 	public void setTimeStamp(int achievementId, String nick,
 			long givenTimeStamp) {
-		nick = UserRecords.getInstance().getActualName(nick);
+		nick = UserRecords.getInstance(bot).getActualName(nick);
 		long timeStamp = getTimeStamp(achievementId, nick);
 		Connection conn = null;
 		Statement stmt = null;
@@ -370,7 +374,7 @@ public class Database {
 	 * @return the epoch time in milliseconds, or 0 if something went wrong
 	 */
 	public long getTimeStamp(int achievementId, String nick) {
-		nick = UserRecords.getInstance().getActualName(nick);
+		nick = UserRecords.getInstance(bot).getActualName(nick);
 		long timeStamp = 0;
 		Connection conn = null;
 		Statement stmt = null;
@@ -491,7 +495,7 @@ public class Database {
 	 * @return the number of points that a user has
 	 */
 	public int getUserPoints(String nick) {
-		nick = UserRecords.getInstance().getActualName(nick);
+		nick = UserRecords.getInstance(bot).getActualName(nick);
 		int points = 0;
 		List<Integer> achievements = getUserAchievements(nick);
 		Connection conn = null;
@@ -538,7 +542,7 @@ public class Database {
 	 * @return a list of achievementIds that a user has been awarded
 	 */
 	public List<Integer> getUserAchievements(String nick) {
-		nick = UserRecords.getInstance().getActualName(nick);
+		nick = UserRecords.getInstance(bot).getActualName(nick);
 		List<Integer> achievements = new LinkedList<Integer>();
 		Connection conn = null;
 		Statement stmt = null;

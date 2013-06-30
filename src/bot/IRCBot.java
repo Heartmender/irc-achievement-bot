@@ -12,6 +12,7 @@ public class IRCBot {
 	
 	public static final String IRC_NETWORK = "irc.us.ponychat.net";
 	public static final String[] IRC_CHANNELS = { "#tulpa" };
+	public static boolean RUNNING = true;
 
 	/**
 	 * IRCBot takes the NickServ password as an argument via CLI.
@@ -21,17 +22,8 @@ public class IRCBot {
 			System.err.println("This program requires that the NickServ pass be the only argument.");
 			System.exit(1);
 		}
-		AchievementBot bot = AchievementBot.getInstance();
-		Database db = null;
-		try {
-			db = Database.getInstance();
-		} catch (Exception e) {
-			System.err.println("Unable to load JDBC driver, so unable to continue execution of program. Sorry :(");
-			System.err.println(e.getLocalizedMessage());
-			System.exit(1);
-		}
+		PircBotX bot = new PircBotX();
 		setUpBot(bot);
-		addModules(bot, db);
 		try {
 			bot.connect(IRC_NETWORK);
 			for(String channel : IRC_CHANNELS) {
@@ -50,10 +42,19 @@ public class IRCBot {
 			System.err.println(e.getLocalizedMessage());
 			System.exit(1);
 		}
+		Database db = null;
+		try {
+			db = Database.getInstance(bot);
+		} catch (Exception e) {
+			System.err.println("Unable to load JDBC driver, so unable to continue execution of program. Sorry :(");
+			System.err.println(e.getLocalizedMessage());
+			System.exit(1);
+		}
 		bot.sendMessage("NickServ", "IDENTIFY " + args[0]);
 		bot.sendMessage("HostServ", "ON"); // attempt to turn on our VHOST
-		while(bot.isRunning()) { // run until forcibly terminated
-			if(!bot.isRunning()) {
+		addModules(bot, db);
+		while(RUNNING) { // run until forcibly terminated
+			if(!RUNNING) {
 				bot.quitServer("Going down for maintenance!");
 				bot.disconnect();
 				System.exit(0);
@@ -106,7 +107,7 @@ public class IRCBot {
 		bot.getListenerManager().addListener(new Score(db));
 		
 		/* user records */
-		bot.getListenerManager().addListener(UserRecords.getInstance());
+		bot.getListenerManager().addListener(UserRecords.getInstance(bot));
 	}
 	
 }

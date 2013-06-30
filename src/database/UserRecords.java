@@ -3,6 +3,7 @@ package database;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.pircbotx.PircBotX;
 import org.pircbotx.hooks.ListenerAdapter;
 import org.pircbotx.hooks.events.JoinEvent;
 import org.pircbotx.hooks.events.KickEvent;
@@ -11,7 +12,7 @@ import org.pircbotx.hooks.events.PartEvent;
 import org.pircbotx.hooks.events.QuitEvent;
 import org.pircbotx.hooks.events.WhoisEvent;
 
-import bot.AchievementBot;
+import bot.IRCBot;
 
 /**
  * This class tries to associate a given user with an identity. 
@@ -21,14 +22,16 @@ public class UserRecords extends ListenerAdapter {
 
 	private static UserRecords instance = null;
 	private Map<String, String> userRecords = new HashMap<String, String>();
+	private PircBotX bot;
 	
-	private UserRecords() {
+	private UserRecords(PircBotX bot) {
 		super();
+		this.bot = bot;
 	}
 	
-	public static UserRecords getInstance() {
+	public static UserRecords getInstance(PircBotX bot) {
 		if(instance == null) {
-			instance = new UserRecords();
+			instance = new UserRecords(bot);
 		}
 		return instance;
 	}
@@ -37,10 +40,10 @@ public class UserRecords extends ListenerAdapter {
 		if(userRecords.containsKey(currentNick)) 
 			return userRecords.get(currentNick);
 		String registeredNick = currentNick;
-		AchievementBot.getInstance().sendRawLine("WHOIS " + currentNick + " " + currentNick);
+		bot.sendRawLine("WHOIS " + currentNick + " " + currentNick);
 		try {
-			WhoisEvent whoisEvent = AchievementBot.getInstance().waitFor(WhoisEvent.class);
-			if(whoisEvent.getRegisteredAs() != null) {
+			WhoisEvent whoisEvent = bot.waitFor(WhoisEvent.class);
+			if(whoisEvent.getRegisteredAs() != null || !whoisEvent.getRegisteredAs().isEmpty()) {
 				registeredNick = whoisEvent.getRegisteredAs();
 			}
 		} catch (InterruptedException e) {

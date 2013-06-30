@@ -2,7 +2,7 @@ package commands;
 
 import org.pircbotx.hooks.events.PrivateMessageEvent;
 
-import bot.AchievementBot;
+import bot.IRCBot;
 import database.Database;
 
 public class Shutdown extends Command {
@@ -15,7 +15,7 @@ public class Shutdown extends Command {
 		String message = event.getMessage();
 		if(message.startsWith("!shutdown")) {
 			if(this.isAuthorizedUser(event.getUser())) {
-				AchievementBot.getInstance().shutDownEverything();
+				IRCBot.RUNNING = false;
 			}
 		}
 	}
