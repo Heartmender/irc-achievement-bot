@@ -71,18 +71,6 @@ public class IRCBot {
 		
 		/* add the modules */
 		addModules(bot, db);
-		
-		/* running loop */
-		while(RUNNING) { // run until forcibly terminated
-			if(!RUNNING) {
-				bot.quitServer("Going down for maintenance!");
-				bot.disconnect();
-				System.exit(0);
-			}
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) { } // ignore
-		}
 	}
 	
 	/**
@@ -92,7 +80,7 @@ public class IRCBot {
 	private static void setUpBot(PircBotX bot) {
 		bot.setName("AchievementBot");
 		bot.setLogin("Two");
-		bot.setVersion("AchievementBot v. 1.04");
+		bot.setVersion("AchievementBot v. 1.06");
 		bot.setFinger("Hey! Save that for the second date <3");
 		bot.setAutoNickChange(true);
 		bot.setAutoReconnect(true);
